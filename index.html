@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Tính ngày</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet prefetch" href="datepicker.css">
+    <script src="bootstrap-datepicker.js"></script>
+    <style>
+        .dropdown-menu.overlay {
+            left: 10px !important;
+        }
+        html{
+            font-size:250%;
+            font-family:'Times New Roman'
+        }
+        .label {
+            white-space: nowrap; margin-right:10%;
+        }
+    </style>
+</head>
+<body style="">
+    <div style="width:100vw; text-align:center;font-size:150%">
+        <strong>Tính ngày</strong>
+    </div>
+    <form class="" id="formA" style="margin:10px">
+        <div class="form-group row">
+            <label for="dpFromDate" class="col-sm-2 col-form-label label" >Từ ngày</label>
+            <div class="col-sm-10">
+                <input type="text" data-date-format="dd-mm-yyyy" readonly class="form-control input-group date datepicker" id="dpFromDate" placeholder="Chọn ngày">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="dpToDate" class="col-sm-2 col-form-label label">Đến ngày</label>
+            <div class="col-sm-10">
+                <input type="text" data-date-format="dd-mm-yyyy" readonly class="form-control input-group date datepicker" id="dpToDate">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="txtDiff" class="col-sm-2 col-form-label label">Số ngày</label>
+            <div class="col-sm-10">
+                <input type="text" value="0" class="form-control" style="border:0px" id="txtDiff">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+<script type="text/javascript">
+    //$(function () {
+    //    $("#dpFromDate, #dpToDate").datepicker({
+    //        autoclose: true,
+    //        todayHighlight: true
+    //    }).datepicker('update', new Date());
+    //});
+    //$().ready(() => {
+    //    $('#formA').submit((e) => {
+    //        var fd = $('#dpFromDate').datepicker("getDate");
+    //        var td = $('#dpToDate').datepicker("getDate");
+
+    //        var diff = td - fd;
+    //        console.log(fd, td, diff);
+    //        e.preventDefault();
+    //    });
+    //});
+
+    $(function () {
+
+        $('#dpFromDate').datepicker({
+            todayHighlight: 'TRUE',
+            autoclose: true,
+            minDate: 0,
+            maxDate: '+1Y+6M'
+        }).on('changeDate', function (ev) {
+            //$('#dpToDate').datepicker('setStartDate', $("#dpFromDate").val());
+            var start = $("#dpFromDate").datepicker("getDate");
+            var end = $("#dpToDate").datepicker("getDate");
+            var diff = parseInt((end.getTime() - start.getTime()) / (24 * 3600 * 1000)) + 1;
+            $("#txtDiff").val(diff);
+        });
+        $('#dpToDate').datepicker({
+            todayHighlight: 'TRUE',
+            autoclose: true,
+            minDate: '0',
+            maxDate: '+1Y+6M'
+        }).datepicker('update', new Date()).on('changeDate', function (ev) {
+            //$('#dpToDate').datepicker('setStartDate', $("#dpFromDate").val());
+            var start = $("#dpFromDate").datepicker("getDate");
+            var end = $("#dpToDate").datepicker("getDate");
+            var diff = parseInt((end.getTime() - start.getTime()) / (24 * 3600 * 1000)) + 1;
+            $("#txtDiff").val(diff);
+        });
+
+        var widthPerDay = window.innerWidth / 7;
+        var heightPerDay = '8vh';
+
+        $('.datepicker').datepicker({ container: 'body', orientation: 'auto bottom' }).on('show', function () {
+            $('.dropdown-menu').addClass('overlay'); // to position the datepicker, or just do it here
+            $('.datepicker td').css({ "width": widthPerDay, "height": heightPerDay }); // change the size of day elements to make the datepicker table resize.
+            $('.datepicker th').css({ "width": widthPerDay, "height": heightPerDay });
+
+        });
+    });
+</script>
